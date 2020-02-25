@@ -25,20 +25,20 @@ server.get('/conversion/:base_currency/:target_currency/:amount', async (req, re
                 let baseCurrencyRate = data.filter(money => money._attributes.currency === baseCurrency)[0]._attributes.rate
                 let targetCurrencyRate = data.filter(money => money._attributes.currency === targetCurrency)[0]._attributes.rate
                 let finalAmount = (targetCurrencyRate / baseCurrencyRate * parseInt(amount))
-                return (finalAmount);
+                return ({ finalAmount, targetCurrency });
             } else if (baseCurrency === "EUR" && targetCurrency !== "EUR") {
                 let targetCurrencyRate = data.filter(money => money._attributes.currency === targetCurrency)[0]._attributes.rate
                 let finalAmount = (targetCurrencyRate * parseInt(amount))
-                return (finalAmount);
+                return ({ finalAmount, targetCurrency })
             } else if (baseCurrency !== "EUR" && targetCurrency === "EUR") {
                 let baseCurrencyRate = data.filter(money => money._attributes.currency === baseCurrency)[0]._attributes.rate
                 let finalAmount = (1 / baseCurrencyRate * parseInt(amount))
-                return (finalAmount);
+                return ({ finalAmount, targetCurrency })
             } else if (baseCurrency === "EUR" && targetCurrency === "EUR") {
                 let finalAmount = parseInt(amount)
-                return finalAmount
+                return ({ finalAmount, targetCurrency })
             }
-            return finalAmount
+
         })
     const json = await fetch_response;
     res.json(json);
