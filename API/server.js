@@ -1,7 +1,10 @@
 const fetch = require('node-fetch');
+const cors = require('cors');
 const convert = require('xml-js')
 const express = require('express');
 const server = express();
+
+server.use(cors());
 server.use(express.json());
 server.get('/conversion/:base_currency/:target_currency/:amount', async (req, res) => {
     let baseCurrency = req.params.base_currency
