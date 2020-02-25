@@ -1,7 +1,7 @@
 {
   "name": "mmsg-project",
   "version": "1.0.0",
-  "description": "MMSG project with XML data and operational Front End",
+  "description": "MMSG project with XML data",
   "main": "index.js",
   "scripts": {
     "start": " nodemon index.js"
@@ -21,7 +21,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-xml-bodyparser": "^0.3.0",
-    "helmet": "^3.21.2",
+    "helmet": "^3.21.3",
     "knex": "^0.20.10",
     "node": "^13.8.0",
     "node-fetch": "^2.6.0",
