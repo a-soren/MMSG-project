@@ -1,5 +1,10 @@
 const fetch = require('node-fetch');
 const convert = require('xml-js')
+const express = require('express');
+const server = express();
+server.use(express.json());
+
+
 
 fetch('https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml')
     .then(function (resp) {
@@ -13,10 +18,13 @@ fetch('https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml')
         console.log(test['gesmes:Envelope']['Cube']['Cube']['Cube'])
     })
 
+server.get('/conversion', async (req, res) => {
+    const api_url = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
+    const fetch_response = await fetch(api_url);
+    const json = await fetch_response.json();
+    response.json(json);
+})
 
 
 
-
-
-
-// module.exports = server;
+module.exports = server;
