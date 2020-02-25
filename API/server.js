@@ -21,11 +21,24 @@ server.get('/conversion/:base_currency/:target_currency/:amount', async (req, re
             var converted = convert.xml2json(xml, { compact: true, spaces: 4 });
             let parced = JSON.parse(converted)
             let data = parced['gesmes:Envelope'].Cube.Cube.Cube
-            let baseCurrencyRate = data.filter(money => money._attributes.currency === baseCurrency)[0]._attributes.rate
-            let targetCurrencyRate = data.filter(money => money._attributes.currency === targetCurrency)[0]._attributes.rate
-            let finalAmount = (targetCurrencyRate / baseCurrencyRate * parseInt(amount))
-            console.log(finalAmount)
-            return ({ finalAmount, targetCurrency });
+            if (baseCurrency !== "EUR" && targetCurrency !== "EUR") {
+                let baseCurrencyRate = data.filter(money => money._attributes.currency === baseCurrency)[0]._attributes.rate
+                let targetCurrencyRate = data.filter(money => money._attributes.currency === targetCurrency)[0]._attributes.rate
+                let finalAmount = (targetCurrencyRate / baseCurrencyRate * parseInt(amount))
+                return (finalAmount);
+            } else if (baseCurrency === "EUR" && targetCurrency !== "EUR") {
+                let targetCurrencyRate = data.filter(money => money._attributes.currency === targetCurrency)[0]._attributes.rate
+                let finalAmount = (targetCurrencyRate * parseInt(amount))
+                return (finalAmount);
+            } else if (baseCurrency !== "EUR" && targetCurrency === "EUR") {
+                let baseCurrencyRate = data.filter(money => money._attributes.currency === baseCurrency)[0]._attributes.rate
+                let finalAmount = (1 / baseCurrencyRate * parseInt(amount))
+                return (finalAmount);
+            } else if (baseCurrency === "EUR" && targetCurrency === "EUR") {
+                let finalAmount = parseInt(amount)
+                return finalAmount
+            }
+            return finalAmount
         })
     const json = await fetch_response;
     res.json(json);
